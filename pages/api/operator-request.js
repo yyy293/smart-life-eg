@@ -1,8 +1,6 @@
-// pages/api/operator-request.ts
-import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ message: "Method not allowed" });
 
   const { email } = req.body;
@@ -12,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     service: "gmail",
     auth: {
       user: process.env.SMARTLIFE_EMAIL,
-      pass: process.env.SMARTLIFE_PASSWORD, // Gmail App Password
+      pass: process.env.SMARTLIFE_PASSWORD, // App Password
     },
   });
 
