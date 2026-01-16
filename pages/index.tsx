@@ -1,21 +1,28 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import logo from "../IMG_1324.jpeg";
+import logo from "../IMG_1324.jpeg"; // logo in root
+
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+};
 
 export default function Home() {
   const [cartOpen,setCartOpen] = useState(false);
-  const [cartItems,setCartItems] = useState([]);
+  const [cartItems,setCartItems] = useState<{id:number,name:string,price:number,qty:number}[]>([]);
   const [showLogin,setShowLogin] = useState(false);
-  const [loginMode,setLoginMode] = useState("login");
+  const [loginMode,setLoginMode] = useState<"login"|"signup">("login");
   const [operatorMode,setOperatorMode] = useState(false);
   const [operatorEmail,setOperatorEmail] = useState("");
   const [showProducts,setShowProducts] = useState(false);
   const [fade,setFade] = useState(false);
+  const [filterCategory,setFilterCategory] = useState("All");
 
   useEffect(()=>{setFade(true)},[]);
 
-  const products = [
-    // Cameras
+  const products:Product[] = [
     {id:1,name:"Tapo 2k outdoor ip 66",price:2800,category:"Cameras"},
     {id:2,name:"Tapo c100 indoor night vision",price:1100,category:"Cameras"},
     {id:3,name:"Tapo indoor",price:1330,category:"Cameras"},
@@ -25,13 +32,9 @@ export default function Home() {
     {id:7,name:"Tap battery doorbell camera wireless",price:4500,category:"Cameras"},
     {id:8,name:"Ring video doorbell",price:4000,category:"Cameras"},
     {id:9,name:"EUFY doorbell camera",price:3900,category:"Cameras"},
-
-    // Decor
     {id:10,name:"Cloud led ceiling 15m",price:1100,category:"Decor"},
     {id:11,name:"Led rgb strip light 15m",price:3200,category:"Decor"},
     {id:12,name:"Night floor lamp light sensor",price:300,category:"Decor"},
-
-    // Smart Devices
     {id:13,name:"Smartwater valve",price:2200,category:"Smart Devices"},
     {id:14,name:"Smart curtain shutter",price:1700,category:"Smart Devices"},
     {id:15,name:"Smart switch pack of three",price:1440,category:"Smart Devices"},
@@ -44,8 +47,6 @@ export default function Home() {
     {id:22,name:"Screen wall switch",price:3300,category:"Smart Devices"},
     {id:23,name:"Led tv back sink",price:8000,category:"Smart Devices"},
     {id:24,name:"Switch bot attachment",price:2900,category:"Smart Devices"},
-
-    // Alexa
     {id:25,name:"Echo show 8in",price:13000,category:"Alexa"},
     {id:26,name:"Echo spot 2024",price:5000,category:"Alexa"},
     {id:27,name:"Echo spot 2017",price:5500,category:"Alexa"},
@@ -55,14 +56,14 @@ export default function Home() {
     {id:31,name:"Alexa echo dot 5th gen",price:5000,category:"Alexa"},
   ];
 
-  const addToCart = (p)=>{
+  const addToCart = (p:Product)=>{
     const exists = cartItems.find(c=>c.id===p.id);
     if(exists) setCartItems(cartItems.map(c=>c.id===p.id?{...c,qty:c.qty+1}:c));
     else setCartItems([...cartItems,{...p,qty:1}]);
     setCartOpen(true);
   };
 
-  const removeFromCart = (id)=>setCartItems(cartItems.filter(c=>c.id!==id));
+  const removeFromCart = (id:number)=>setCartItems(cartItems.filter(c=>c.id!==id));
   const total = cartItems.reduce((sum,i)=>sum+i.price*i.qty,0);
 
   const handleOperator = async ()=>{
@@ -75,9 +76,11 @@ export default function Home() {
     }catch(err){alert("Failed");}
   };
 
+  const categories = ["All","Cameras","Decor","Smart Devices","Alexa"];
+  const filteredProducts = filterCategory==="All"?products:products.filter(p=>p.category===filterCategory);
+
   return (
     <div style={{fontFamily:"Arial, sans-serif",background:"#f0f4f8",minHeight:"100vh",transition:"opacity 1s",opacity:fade?1:0}}>
-
       {/* NAVBAR */}
       <header style={{background:"#001f3f",color:"white",padding:"15px 30px",display:"flex",alignItems:"center"}}>
         <h1>Smart Life</h1>
@@ -93,44 +96,26 @@ export default function Home() {
       <section style={{padding:"120px 20px",textAlign:"center",background:"#e0e6ef"}}>
         <h2 style={{fontSize:"48px"}}>Welcome to Smart Life</h2>
         <p style={{fontSize:"20px",maxWidth:"900px",margin:"auto"}}>We design smart homes and innovative gadgets to make your life easier.</p>
-        <button onClick={()=>setShowProducts(true)} style={{
-          marginTop:"20px",padding:"10px 20px",background:"#001f3f",color:"white",
-          border:"none",cursor:"pointer",transition:"transform 0.3s", fontSize:"16px"
-        }}
-        onMouseEnter={e=>e.currentTarget.style.transform="scale(1.05)"}
-        onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>View Products</button>
+        <button onClick={()=>setShowProducts(true)} style={{marginTop:"20px",padding:"10px 20px",background:"#001f3f",color:"white",border:"none",cursor:"pointer",transition:"transform 0.3s", fontSize:"16px"}}>View Products</button>
       </section>
 
       {/* PRODUCTS MODAL */}
       {showProducts && (
-        <div style={{
-          position:"fixed",top:0,left:0,width:"100%",height:"100%",
-          backdropFilter:"blur(4px)",background:"rgba(0,0,0,0.6)",
-          overflowY:"auto",zIndex:1000,animation:"fadeIn 0.5s"
-        }}>
+        <div style={{position:"fixed",top:0,left:0,width:"100%",height:"100%",backdropFilter:"blur(4px)",background:"rgba(0,0,0,0.6)",overflowY:"auto",zIndex:1000}}>
           <div style={{background:"white",padding:"20px",borderRadius:"10px",maxWidth:"900px",margin:"50px auto"}}>
             <button onClick={()=>setShowProducts(false)} style={{float:"right",cursor:"pointer"}}>X</button>
             <h2>Products</h2>
+            <div style={{display:"flex",gap:"10px",marginBottom:"15px"}}>
+              {categories.map(cat=>(
+                <button key={cat} onClick={()=>setFilterCategory(cat)} style={{background: filterCategory===cat?"#001f3f":"#f0f0f0",color: filterCategory===cat?"white":"black",padding:"5px 10px",border:"none",cursor:"pointer",borderRadius:"5px"}}>{cat}</button>
+              ))}
+            </div>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:"15px"}}>
-              {products.map((p,i)=>(
-                <div key={p.id} style={{
-                  background:"#f9f9f9",padding:"10px",borderRadius:"5px",
-                  transition:"transform 0.3s, box-shadow 0.3s, opacity 0.5s",
-                  cursor:"pointer",
-                  opacity:0,
-                  animation:`fadeInCard 0.5s ease forwards ${i*0.1}s`
-                }}
-                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-5px)"; e.currentTarget.style.boxShadow="0 4px 15px rgba(0,0,0,0.2)"}}
-                onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"}}
-                >
+              {filteredProducts.map(p=>(
+                <div key={p.id} style={{background:"#f9f9f9",padding:"10px",borderRadius:"5px",cursor:"pointer"}}>
                   <h4>{p.name}</h4>
                   <p>{p.price} LE</p>
-                  <button onClick={()=>addToCart(p)} style={{
-                    background:"#001f3f",color:"white",border:"none",padding:"5px 10px",cursor:"pointer",
-                    transition:"background 0.3s"
-                  }}
-                  onMouseEnter={e=>e.currentTarget.style.background="#003366"}
-                  onMouseLeave={e=>e.currentTarget.style.background="#001f3f"}>Add to Cart</button>
+                  <button onClick={()=>addToCart(p)} style={{background:"#001f3f",color:"white",border:"none",padding:"5px 10px",cursor:"pointer"}}>Add to Cart</button>
                 </div>
               ))}
             </div>
@@ -139,10 +124,7 @@ export default function Home() {
       )}
 
       {/* CART SIDEBAR */}
-      <div style={{
-        position:"fixed",top:0,right:cartOpen?0:"-350px",width:"300px",height:"100vh",
-        background:"white",padding:"20px",transition:"right 0.5s",boxShadow:"-2px 0 15px rgba(0,0,0,0.3)",backdropFilter:"blur(2px)"
-      }}>
+      <div style={{position:"fixed",top:0,right:cartOpen?0:"-350px",width:"300px",height:"100vh",background:"white",padding:"20px",transition:"right 0.5s",boxShadow:"-2px 0 15px rgba(0,0,0,0.3)"}}>
         <button onClick={()=>setCartOpen(false)} style={{marginBottom:"20px",cursor:"pointer"}}>X</button>
         <h2>Your Cart</h2>
         {cartItems.length===0?<p>Empty</p>:(
@@ -163,7 +145,7 @@ export default function Home() {
 
       {/* LOGIN/SIGNUP MODAL */}
       {showLogin && (
-        <div style={{position:"fixed",top:0,left:0,width:"100%",height:"100%",background:"rgba(0,0,0,0.6)",display:"flex",justifyContent:"center",alignItems:"center",animation:"fadeIn 0.5s"}}>
+        <div style={{position:"fixed",top:0,left:0,width:"100%",height:"100%",background:"rgba(0,0,0,0.6)",display:"flex",justifyContent:"center",alignItems:"center"}}>
           <div style={{background:"white",padding:"30px",borderRadius:"10px",width:"350px",position:"relative"}}>
             <button onClick={()=>setShowLogin(false)} style={{position:"absolute",top:"10px",right:"15px",cursor:"pointer"}}>X</button>
             <div style={{display:"flex",justifyContent:"space-around",marginBottom:"20px"}}>
@@ -175,17 +157,13 @@ export default function Home() {
               <input type="email" placeholder="Email" value={operatorEmail} onChange={e=>setOperatorEmail(e.target.value)}/>
               {!operatorMode && <input type="text" placeholder="Username"/>}
               <input type="password" placeholder="Password"/>
-              {operatorMode && <p style={{color:"red"}}>Request sent to smart.life.www@gmail.com</p>}
-              <button onClick={()=>operatorMode?handleOperator():setShowLogin(false)} style={{background:"#001f3f",color:"white",padding:"8px 0",cursor:"pointer"}}> {operatorMode?"Request Operator":"Submit"} </button>
+              {operatorMode && <p style={{color:"red"}}>Request will be sent to smart.life.www@gmail.com</p>}
+              <button onClick={()=>operatorMode?fetch("/api/operator-request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:operatorEmail})}).then(r=>r.json().then(d=>alert(d.message))):setShowLogin(false)} style={{background:"#001f3f",color:"white",padding:"8px 0",cursor:"pointer"}}> {operatorMode?"Request Operator":"Submit"} </button>
             </div>
           </div>
         </div>
       )}
 
-      <style jsx>{`
-        @keyframes fadeIn { from {opacity:0} to {opacity:1} }
-        @keyframes fadeInCard { from {opacity:0; transform:translateY(10px)} to {opacity:1; transform:translateY(0)} }
-      `}</style>
     </div>
   );
 }
