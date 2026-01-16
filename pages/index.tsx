@@ -7,6 +7,7 @@ export default function Home() {
     { id: 3, name: "Smart Door Lock", price: 129 },
     { id: 4, name: "Smart Camera", price: 89 },
     { id: 5, name: "Smart Speaker", price: 59 },
+    { id: 6, name: "Smart Hub", price: 149 },
   ];
 
   return (
@@ -18,7 +19,9 @@ export default function Home() {
         <nav style={{ marginLeft: "auto" }}>
           <Link href="/" style={{ color: "white", marginRight: "15px" }}>Home</Link>
           <Link href="/cart" style={{ color: "white", marginRight: "15px" }}>Cart</Link>
-          <Link href="#about" style={{ color: "white" }}>About Us</Link>
+          <Link href="#about" style={{ color: "white", marginRight: "15px" }}>About Us</Link>
+          <Link href="#features" style={{ color: "white", marginRight: "15px" }}>Features</Link>
+          <Link href="#contact" style={{ color: "white" }}>Contact</Link>
         </nav>
       </header>
 
@@ -26,8 +29,8 @@ export default function Home() {
       <section style={{ padding: "60px 20px", textAlign: "center" }}>
         <h2 style={{ fontSize: "36px", marginBottom: "20px" }}>Welcome to Smart Life</h2>
         <p style={{ fontSize: "18px", maxWidth: "800px", margin: "auto" }}>
-          We build smart homes and smart gadgets that make your life easier, safer, and more connected.
-          Order smart rooms or smart devices from our collection and experience the future of home automation.
+          We design smart homes and innovative gadgets to make your life easier, safer, and more connected.
+          Order smart rooms or individual smart devices and experience the future of home automation today.
         </p>
       </section>
 
@@ -48,13 +51,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SMART ROOMS */}
+      <section style={{ padding: "60px 20px", backgroundColor: "white" }}>
+        <h2 style={{ fontSize: "28px", textAlign: "center", marginBottom: "20px" }}>Smart Rooms</h2>
+        <p style={{ maxWidth: "800px", margin: "auto", textAlign: "center" }}>
+          Order fully automated smart rooms with lights, temperature control, smart locks, and integrated gadgets.
+          Make your home a connected and intelligent space.
+        </p>
+      </section>
+
+      {/* FEATURES */}
+      <section id="features" style={{ padding: "60px 20px", backgroundColor: "#f0f4f8" }}>
+        <h2 style={{ fontSize: "28px", textAlign: "center", marginBottom: "20px" }}>Why Choose Us</h2>
+        <ul style={{ maxWidth: "800px", margin: "auto", lineHeight: "1.6" }}>
+          <li>✅ Expert smart home design and installation</li>
+          <li>✅ High-quality smart gadgets</li>
+          <li>✅ Customizable solutions for your home</li>
+          <li>✅ Excellent customer service</li>
+          <li>✅ Safe, secure, and reliable technology</li>
+        </ul>
+      </section>
+
       {/* ABOUT US */}
-      <section id="about" style={{ backgroundColor: "#001f3f", color: "white", padding: "60px 20px", marginTop: "40px" }}>
+      <section id="about" style={{ backgroundColor: "#001f3f", color: "white", padding: "60px 20px" }}>
         <h2 style={{ fontSize: "28px", textAlign: "center", marginBottom: "20px" }}>About Us</h2>
         <p style={{ maxWidth: "800px", margin: "auto", textAlign: "center", lineHeight: "1.6" }}>
           Smart Life is a company dedicated to creating smart homes and innovative gadgets.  
           We design entire smart rooms, as well as individual smart devices, to make your home more comfortable, safe, and connected.  
           Our goal is to bring the future of home automation to your fingertips.
+        </p>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" style={{ padding: "60px 20px", backgroundColor: "white" }}>
+        <h2 style={{ fontSize: "28px", textAlign: "center", marginBottom: "20px" }}>Contact Us</h2>
+        <p style={{ maxWidth: "800px", margin: "auto", textAlign: "center" }}>
+          Email: info@smartlife.com<br />
+          Phone: +20 123 456 7890<br />
+          Address: 123 Smart Street, Cairo, Egypt
         </p>
       </section>
 
