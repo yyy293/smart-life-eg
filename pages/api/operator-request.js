@@ -1,34 +1,26 @@
 import nodemailer from "nodemailer";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
+  if (req.method !== "POST") return res.status(405).json({ message: "Method not allowed" });
 
   const { email } = req.body;
+  if (!email) return res.status(400).json({ message: "Email is required" });
 
-  if (!email) {
-    return res.status(400).json({ message: "Email is required" });
-  }
-
-  // Create transporter using Gmail App Password
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.SMARTLIFE_EMAIL,      // Your Gmail
-      pass: process.env.SMARTLIFE_PASSWORD,   // Gmail App Password (16 chars)
+      user: process.env.SMARTLIFE_EMAIL,
+      pass: process.env.SMARTLIFE_PASSWORD,
     },
   });
 
-  const mailOptions = {
-    from: process.env.SMARTLIFE_EMAIL,
-    to: "smart.life.www@gmail.com",           // Admin email for operator approval
-    subject: "New Operator Request",
-    text: `A user wants to become an operator: ${email}\n\nPlease accept or reject manually.`,
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
+    await transporter.sendMail({
+      from: process.env.SMARTLIFE_EMAIL,
+      to: "smart.life.www@gmail.com",
+      subject: "New Operator Request",
+      text: `A user wants to become an operator: ${email}`,
+    });
     res.status(200).json({ message: "Request sent to admin email!" });
   } catch (err) {
     console.error(err);
