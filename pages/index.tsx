@@ -1,25 +1,25 @@
 import { useState } from "react";
-import Link from "next/link";
 
 export default function Home() {
   const [cartOpen, setCartOpen] = useState(false);
-  const [loginType, setLoginType] = useState<"customer" | "operator" | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginMode, setLoginMode] = useState<"login" | "signup">("login");
+  const [operatorMode, setOperatorMode] = useState(false);
   const [operatorEmail, setOperatorEmail] = useState("");
   const [operatorApproved, setOperatorApproved] = useState<boolean | null>(null);
 
   const products = [
-    { id: 1, name: "Smart Light", price: 49 },
-    { id: 2, name: "Smart Thermostat", price: 199 },
-    { id: 3, name: "Smart Door Lock", price: 129 },
-    { id: 4, name: "Smart Camera", price: 89 },
-    { id: 5, name: "Smart Speaker", price: 59 },
+    { id: 1, name: "Alexa Smart", price: 49 },
+    { id: 2, name: "Smart IR", price: 199 },
+    { id: 3, name: "Smart Thermostat", price: 129 },
+    { id: 4, name: "Smart Door Lock", price: 89 },
+    { id: 5, name: "Smart Camera", price: 59 },
     { id: 6, name: "Smart Hub", price: 149 },
   ];
 
   const cartItems = [
-    { id: 1, name: "Smart Light", price: 49, qty: 1 },
-    { id: 2, name: "Smart Thermostat", price: 199, qty: 2 },
+    { id: 1, name: "Alexa Smart", price: 49, qty: 1 },
+    { id: 2, name: "Smart IR", price: 199, qty: 2 },
   ];
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
@@ -31,29 +31,19 @@ export default function Home() {
   };
 
   return (
-    <div style={{ fontFamily: "Arial", backgroundColor: "#f0f4f8" }}>
+    <div style={{ fontFamily: "Arial, sans-serif", backgroundColor: "#f0f4f8", minHeight: "100vh" }}>
 
       {/* NAVBAR */}
-      <header style={{
-        backgroundColor: "#001f3f",
-        color: "white",
-        padding: "15px 30px",
-        display: "flex",
-        alignItems: "center",
-        position: "sticky",
-        top: 0,
-        zIndex: 100
-      }}>
-        <img src="/IMG_1324.jpeg" alt="Logo" style={{ height: "50px", marginRight: "20px" }} />
+      <header style={{ backgroundColor: "#001f3f", color: "white", padding: "15px 30px", display: "flex", alignItems: "center", position: "sticky", top: 0, zIndex: 100 }}>
         <h1 style={{ fontSize: "24px" }}>Smart Life</h1>
         <nav style={{ marginLeft: "auto", display: "flex", gap: "15px" }}>
           <button onClick={() => setCartOpen(true)} style={{ color: "white", background: "none", border: "none", cursor: "pointer" }}>Cart</button>
-          <button onClick={() => { setShowLoginModal(true); setLoginType("customer"); }} style={{ color: "white", background: "none", border: "none", cursor: "pointer" }}>Login/SignUp Customer</button>
-          <button onClick={() => { setShowLoginModal(true); setLoginType("operator"); }} style={{ color: "white", background: "none", border: "none", cursor: "pointer" }}>Login/SignUp Operator</button>
+          <button onClick={() => { setShowLoginModal(true); setLoginMode("login"); setOperatorMode(false); }} style={{ color: "white", background: "none", border: "none", cursor: "pointer" }}>Login</button>
+          <button onClick={() => { setShowLoginModal(true); setLoginMode("signup"); setOperatorMode(false); }} style={{ color: "white", background: "none", border: "none", cursor: "pointer" }}>Sign Up</button>
         </nav>
       </header>
 
-      {/* SIDEBAR CART */}
+      {/* CART SIDEBAR */}
       <div style={{
         position: "fixed",
         top: 0,
@@ -68,7 +58,7 @@ export default function Home() {
         display: "flex",
         flexDirection: "column"
       }}>
-        <button onClick={() => setCartOpen(false)} style={{ alignSelf: "flex-end", marginBottom: "20px" }}>Close</button>
+        <button onClick={() => setCartOpen(false)} style={{ alignSelf: "flex-end", marginBottom: "20px" }}>X</button>
         <h2 style={{ marginBottom: "20px" }}>Your Cart</h2>
         {cartItems.length === 0 ? <p>Your cart is empty</p> : (
           <>
@@ -100,25 +90,32 @@ export default function Home() {
           alignItems: "center",
           zIndex: 1000
         }}>
-          <div style={{ backgroundColor: "white", padding: "30px", borderRadius: "10px", width: "320px" }}>
-            <h2 style={{ marginBottom: "20px" }}>{loginType === "customer" ? "Customer Login/Signup" : "Operator Login/Signup"}</h2>
-            <input
-              type="email"
-              placeholder="Enter Email"
-              value={operatorEmail}
-              onChange={(e) => setOperatorEmail(e.target.value)}
-              style={{ width: "100%", marginBottom: "15px", padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
-            />
-            <button
-              style={{ width: "100%", backgroundColor: "#001f3f", color: "white", padding: "10px", border: "none", borderRadius: "5px", cursor: "pointer" }}
-              onClick={() => {
-                if (loginType === "operator") handleOperatorRequest();
-                else alert(`Customer ${operatorEmail} logged in!`);
-                setShowLoginModal(false);
-              }}
-            >
-              {loginType === "operator" ? "Request Operator Access" : "Login / Sign Up"}
-            </button>
+          <div style={{ backgroundColor: "white", padding: "30px", borderRadius: "10px", width: "350px", position: "relative" }}>
+            {/* Close X */}
+            <button onClick={() => setShowLoginModal(false)} style={{ position: "absolute", top: "10px", right: "15px", fontSize: "18px", border: "none", background: "none", cursor: "pointer" }}>X</button>
+
+            {/* Tabs */}
+            <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "20px" }}>
+              <button onClick={() => { setLoginMode("login"); setOperatorMode(false); }} style={{ borderBottom: loginMode === "login" ? "2px solid #001f3f" : "none", padding: "5px 10px", cursor: "pointer" }}>Login</button>
+              <button onClick={() => { setLoginMode("signup"); setOperatorMode(false); }} style={{ borderBottom: loginMode === "signup" ? "2px solid #001f3f" : "none", padding: "5px 10px", cursor: "pointer" }}>Sign Up</button>
+            </div>
+
+            {/* Operator note */}
+            <p style={{ fontSize: "14px", marginBottom: "10px", color: "#555" }}>
+              If you are or want to be an operator, click <span style={{ color: "#001f3f", cursor: "pointer" }} onClick={() => setOperatorMode(true)}>here</span>.
+            </p>
+
+            {/* Form */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <input type="email" placeholder="Email" style={{ padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }} />
+              {!operatorMode && <input type="text" placeholder="Username" style={{ padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }} />}
+              <input type="password" placeholder="Password" style={{ padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }} />
+              {operatorMode && <p style={{ fontSize: "14px", color: "red" }}>Request will be sent to smart.life.www@gmail.com</p>}
+              <button style={{ padding: "10px", backgroundColor: "#001f3f", color: "white", border: "none", borderRadius: "5px", cursor: "pointer" }}>
+                {operatorMode ? "Request Operator Access" : loginMode === "login" ? "Login" : "Sign Up"}
+              </button>
+            </div>
+
             {operatorApproved === false && <p style={{ color: "red", marginTop: "10px" }}>Sorry, you are not accepted as an operator.</p>}
             {operatorApproved === true && <p style={{ color: "green", marginTop: "10px" }}>You are now an operator!</p>}
           </div>
@@ -126,26 +123,30 @@ export default function Home() {
       )}
 
       {/* HERO SECTION */}
-      <section style={{ padding: "80px 20px", textAlign: "center", backgroundColor: "#e0e6ef" }}>
-        <h2 style={{ fontSize: "42px", marginBottom: "20px" }}>Welcome to Smart Life</h2>
+      <section style={{ padding: "100px 20px", textAlign: "center", backgroundColor: "#e0e6ef" }}>
+        <h2 style={{ fontSize: "48px", marginBottom: "20px" }}>Welcome to Smart Life</h2>
         <p style={{ fontSize: "20px", maxWidth: "900px", margin: "auto" }}>
           We design smart homes and innovative gadgets to make your life easier, safer, and more connected.
-          Order smart rooms or individual smart devices and experience the future of home automation today.
         </p>
-        <button style={{ marginTop: "20px", padding: "12px 25px", backgroundColor: "#001f3f", color: "white", border: "none", borderRadius: "5px", cursor: "pointer" }}>Explore Products</button>
+        <button style={{ marginTop: "20px", padding: "15px 30px", backgroundColor: "#001f3f", color: "white", border: "none", borderRadius: "5px", cursor: "pointer" }}>Explore Products</button>
       </section>
 
       {/* PRODUCTS */}
       <section style={{ padding: "80px 20px" }}>
         <h2 style={{ fontSize: "36px", textAlign: "center", marginBottom: "40px" }}>Our Products</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "25px", maxWidth: "1200px", margin: "auto" }}>
-          {products.map((product) => (
-            <div key={product.id} style={{ backgroundColor: "white", padding: "20px", borderRadius: "10px", boxShadow: "0 4px 10px rgba(0,0,0,0.15)", transition: "transform 0.2s", cursor: "pointer" }}
-              onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")}
-              onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}>
-              <div style={{ height: "150px", backgroundColor: "#ccc", borderRadius: "6px", marginBottom: "15px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span>Product Image</span>
-              </div>
+          {products.map(product => (
+            <div key={product.id} style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "10px",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+              transition: "transform 0.2s",
+              cursor: "pointer"
+            }}
+              onMouseEnter={e => e.currentTarget.style.transform = "scale(1.03)"}
+              onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"
+              }>
               <h3 style={{ fontSize: "22px", marginBottom: "8px" }}>{product.name}</h3>
               <p style={{ marginBottom: "10px", fontWeight: "bold" }}>${product.price}</p>
               <button style={{ backgroundColor: "#001f3f", color: "white", padding: "8px 15px", border: "none", borderRadius: "5px", cursor: "pointer" }}>View</button>
@@ -158,8 +159,7 @@ export default function Home() {
       <section style={{ padding: "80px 20px", backgroundColor: "white" }}>
         <h2 style={{ fontSize: "36px", textAlign: "center", marginBottom: "20px" }}>Smart Rooms</h2>
         <p style={{ maxWidth: "900px", margin: "auto", textAlign: "center", lineHeight: "1.8" }}>
-          Order fully automated smart rooms with lights, temperature control, smart locks, and integrated gadgets.
-          Make your home a connected and intelligent space. Our smart rooms are customizable to your lifestyle and preferences.
+          Fully automated smart rooms with lights, temperature control, smart locks, and integrated gadgets. Customizable for your lifestyle.
         </p>
       </section>
 
@@ -179,9 +179,7 @@ export default function Home() {
       <section id="about" style={{ backgroundColor: "#001f3f", color: "white", padding: "80px 20px" }}>
         <h2 style={{ fontSize: "36px", textAlign: "center", marginBottom: "20px" }}>About Us</h2>
         <p style={{ maxWidth: "900px", margin: "auto", textAlign: "center", lineHeight: "1.8", fontSize: "18px" }}>
-          Smart Life is a company dedicated to creating smart homes and innovative gadgets.  
-          We design entire smart rooms, as well as individual smart devices, to make your home more comfortable, safe, and connected.  
-          Our goal is to bring the future of home automation to your fingertips.
+          Smart Life is a company dedicated to creating smart homes and innovative gadgets. We design entire smart rooms and individual devices to make your home comfortable, safe, and connected.
         </p>
       </section>
 
