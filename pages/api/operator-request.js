@@ -11,20 +11,20 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "Email is required" });
   }
 
-  // create transporter using Gmail App Password
+  // Create transporter using Gmail App Password
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.SMARTLIFE_EMAIL,      // your Gmail
-      pass: process.env.SMARTLIFE_PASSWORD,   // Gmail App Password
+      user: process.env.SMARTLIFE_EMAIL,      // Your Gmail
+      pass: process.env.SMARTLIFE_PASSWORD,   // Gmail App Password (16 chars)
     },
   });
 
   const mailOptions = {
     from: process.env.SMARTLIFE_EMAIL,
-    to: "smart.life.www@gmail.com",   // your operator approval email
+    to: "smart.life.www@gmail.com",           // Admin email for operator approval
     subject: "New Operator Request",
-    text: `A user wants to become an operator: ${email}\n\nAccept or Reject manually.`,
+    text: `A user wants to become an operator: ${email}\n\nPlease accept or reject manually.`,
   };
 
   try {
