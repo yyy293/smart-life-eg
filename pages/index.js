@@ -1,28 +1,21 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import logo from "../IMG_1324.jpeg"; // logo in root
-
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-};
+import logo from "../IMG_1324.jpeg";
 
 export default function Home() {
-  const [cartOpen,setCartOpen] = useState(false);
-  const [cartItems,setCartItems] = useState<{id:number,name:string,price:number,qty:number}[]>([]);
-  const [showLogin,setShowLogin] = useState(false);
-  const [loginMode,setLoginMode] = useState<"login"|"signup">("login");
-  const [operatorMode,setOperatorMode] = useState(false);
-  const [operatorEmail,setOperatorEmail] = useState("");
-  const [showProducts,setShowProducts] = useState(false);
-  const [fade,setFade] = useState(false);
-  const [filterCategory,setFilterCategory] = useState("All");
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const [showLogin, setShowLogin] = useState(false);
+  const [loginMode, setLoginMode] = useState("login");
+  const [operatorMode, setOperatorMode] = useState(false);
+  const [operatorEmail, setOperatorEmail] = useState("");
+  const [showProducts, setShowProducts] = useState(false);
+  const [fade, setFade] = useState(false);
+  const [filterCategory, setFilterCategory] = useState("All");
 
-  useEffect(()=>{setFade(true)},[]);
+  useEffect(() => setFade(true), []);
 
-  const products:Product[] = [
+  const products = [
     {id:1,name:"Tapo 2k outdoor ip 66",price:2800,category:"Cameras"},
     {id:2,name:"Tapo c100 indoor night vision",price:1100,category:"Cameras"},
     {id:3,name:"Tapo indoor",price:1330,category:"Cameras"},
@@ -53,34 +46,24 @@ export default function Home() {
     {id:28,name:"Echo pop black 1st gen",price:3500,category:"Alexa"},
     {id:29,name:"Echo pop purple 1st gen",price:3600,category:"Alexa"},
     {id:30,name:"Echo show 5th gen",price:8300,category:"Alexa"},
-    {id:31,name:"Alexa echo dot 5th gen",price:5000,category:"Alexa"},
+    {id:31,name:"Alexa echo dot 5th gen",price:5000,category:"Alexa"}
   ];
 
-  const addToCart = (p:Product)=>{
-    const exists = cartItems.find(c=>c.id===p.id);
+  const addToCart = (p) => {
+    const exists = cartItems.find(c => c.id===p.id);
     if(exists) setCartItems(cartItems.map(c=>c.id===p.id?{...c,qty:c.qty+1}:c));
     else setCartItems([...cartItems,{...p,qty:1}]);
     setCartOpen(true);
   };
 
-  const removeFromCart = (id:number)=>setCartItems(cartItems.filter(c=>c.id!==id));
+  const removeFromCart = (id) => setCartItems(cartItems.filter(c=>c.id!==id));
   const total = cartItems.reduce((sum,i)=>sum+i.price*i.qty,0);
-
-  const handleOperator = async ()=>{
-    try{
-      const res = await fetch("/api/operator-request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:operatorEmail})});
-      const data = await res.json();
-      alert(data.message);
-      setShowLogin(false);
-      setOperatorMode(false);
-    }catch(err){alert("Failed");}
-  };
 
   const categories = ["All","Cameras","Decor","Smart Devices","Alexa"];
   const filteredProducts = filterCategory==="All"?products:products.filter(p=>p.category===filterCategory);
 
   return (
-    <div style={{fontFamily:"Arial, sans-serif",background:"#f0f4f8",minHeight:"100vh",transition:"opacity 1s",opacity:fade?1:0}}>
+    <div style={{fontFamily:"Arial,sans-serif",background:"#f0f4f8",minHeight:"100vh",transition:"opacity 1s",opacity:fade?1:0}}>
       {/* NAVBAR */}
       <header style={{background:"#001f3f",color:"white",padding:"15px 30px",display:"flex",alignItems:"center"}}>
         <h1>Smart Life</h1>
@@ -96,7 +79,7 @@ export default function Home() {
       <section style={{padding:"120px 20px",textAlign:"center",background:"#e0e6ef"}}>
         <h2 style={{fontSize:"48px"}}>Welcome to Smart Life</h2>
         <p style={{fontSize:"20px",maxWidth:"900px",margin:"auto"}}>We design smart homes and innovative gadgets to make your life easier.</p>
-        <button onClick={()=>setShowProducts(true)} style={{marginTop:"20px",padding:"10px 20px",background:"#001f3f",color:"white",border:"none",cursor:"pointer",transition:"transform 0.3s", fontSize:"16px"}}>View Products</button>
+        <button onClick={()=>setShowProducts(true)} style={{marginTop:"20px",padding:"10px 20px",background:"#001f3f",color:"white",border:"none",cursor:"pointer"}}>View Products</button>
       </section>
 
       {/* PRODUCTS MODAL */}
@@ -163,7 +146,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
     </div>
   );
 }
