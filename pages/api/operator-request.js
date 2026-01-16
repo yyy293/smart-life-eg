@@ -10,17 +10,19 @@ export default async function handler(req, res) {
     service: "gmail",
     auth: {
       user: process.env.SMARTLIFE_EMAIL,
-      pass: process.env.SMARTLIFE_PASSWORD,
-    },
+      pass: process.env.SMARTLIFE_PASSWORD
+    }
   });
 
+  const mailOptions = {
+    from: process.env.SMARTLIFE_EMAIL,
+    to: "smart.life.www@gmail.com",
+    subject: "New Operator Request",
+    text: `A user wants to become an operator: ${email}`
+  };
+
   try {
-    await transporter.sendMail({
-      from: process.env.SMARTLIFE_EMAIL,
-      to: "smart.life.www@gmail.com",
-      subject: "New Operator Request",
-      text: `A user wants to become an operator: ${email}`,
-    });
+    await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "Request sent to admin email!" });
   } catch (err) {
     console.error(err);
