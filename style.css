@@ -1,1 +1,28 @@
 
+body { margin:0; font-family:Arial; background:#0b132b; color:white; }
+nav {
+ display:flex; justify-content:space-between; align-items:center;
+ background:#0a1f44; padding:15px;
+}
+nav a { color:white; margin:0 10px; text-decoration:none; }
+nav img { height:40px; border-radius:6px; }
+
+.hero { text-align:center; padding:60px 20px; }
+.btn { background:#1e90ff; padding:12px 20px; color:white; border-radius:8px; text-decoration:none; }
+
+section { padding:30px; max-width:1200px; margin:auto; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+
+.card {
+ background:#111c3a; padding:20px; border-radius:14px;
+ transition:.3s;
+}
+.card:hover { transform:translateY(-6px); }
+
+input, select, button {
+ width:100%; padding:10px; margin:8px 0;
+ border-radius:6px; border:none;
+}
+
+.auth { max-width:360px; margin:60px auto; }
+footer { background:#0a1f44; text-align:center; padding:20px; }
