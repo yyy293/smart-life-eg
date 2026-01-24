@@ -3,29 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Life - Login</title>
+<title>Smart Life</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-  <img src="IMG_1324.jpeg" alt="Logo" style="height:50px;">
-  <div class="controls">
-    <button onclick="setLang('en')">EN</button>
-    <button onclick="setLang('ar')">AR</button>
-    <button onclick="toggleTheme()">Light / Dark</button>
+  <img src="IMG_1324.jpeg" alt="Logo" class="logo">
+  <div class="header-buttons">
+    <button onclick="showLogin()">Login / Signup</button>
+    <button onclick="location.href='products.html'">Explore Products</button>
+    <select onchange="setLang(this.value)">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+    </select>
+    <button onclick="toggleTheme()">🌓</button>
   </div>
 </header>
 
 <main>
-  <h2 data-i18n="welcome">Welcome to Smart Life</h2>
-
-  <div id="auth">
-    <label>Email: <input type="email" id="email"></label><br>
-    <label>Username: <input type="text" id="username"></label><br>
-    <label>Password: <input type="password" id="password"></label><br>
+  <h1>Welcome to Smart Life</h1>
+  <div id="authForm" class="auth-form">
+    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
     <label>
-      <input type="checkbox" id="isOperator"> Operator?
-    </label><br>
+      <input type="checkbox" id="isOperator"> I want to be an operator
+    </label>
     <button onclick="signup()">Sign Up</button>
     <button onclick="login()">Login</button>
   </div>
