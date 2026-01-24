@@ -215,4 +215,3 @@ function renderOperatorOrders(){
   if(!container) return;
   container.innerHTML="<p>No orders yet.</p>"; // Future: Extend to real orders
 }
-
