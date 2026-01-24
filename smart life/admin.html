@@ -1,1 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Life - Admin</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <img src="IMG_1324.jpeg" alt="Logo" style="height:50px;">
+  <div class="controls">
+    <button onclick="setLang('en')">EN</button>
+    <button onclick="setLang('ar')">AR</button>
+    <button onclick="toggleTheme()">Light / Dark</button>
+  </div>
+</header>
+
+<main>
+<h2>Admin Panel</h2>
+
+<h3>Products</h3>
+<div id="adminProducts"></div>
+
+<h3>Add New Product</h3>
+<label>Name: <input type="text" id="newName"></label>
+<label>Price: <input type="number" id="newPrice"></label>
+<button onclick="addProduct()">Add Product</button>
+
+<h3>Operator Requests</h3>
+<div id="operatorRequests"></div>
+</main>
+
+<script src="app.js"></script>
+<script>
+if(!localStorage.getItem("user") || localStorage.getItem("role")!=="admin") location.href="index.html";
+renderAdminProducts();
+renderOperatorRequests();
+</script>
+</body>
+</html>
 
