@@ -2,41 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Smart Life</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<nav>
-  <h1>Smart Life</h1>
-  <div>
-    <a href="products.html">Products</a>
-    <a href="cart.html">Cart (<span id="cartCount">0</span>)</a>
-    <a href="login.html">Login</a>
-  </div>
-  <img src="IMG_1324.jpeg">
-</nav>
+<header>
+  <img src="IMG_1324.jpeg" class="logo">
+  <nav>
+    <a href="index.html" data-en="Home" data-ar="الرئيسية"></a>
+    <a href="products.html" data-en="Products" data-ar="المنتجات"></a>
+    <a href="cart.html" data-en="Cart" data-ar="السلة"> (<span id="cartCount">0</span>)</a>
+    <a href="admin.html" data-en="Admin" data-ar="الإدارة"></a>
+  </nav>
 
-<header class="hero">
-  <h2>Smart Homes Made Simple</h2>
-  <p>Automation • Security • Smart Living</p>
-  <a class="btn" href="products.html">Explore Products</a>
+  <div class="toggles">
+    <button onclick="toggleLang()">AR / EN</button>
+    <button onclick="toggleTheme()">🌙</button>
+  </div>
 </header>
 
-<section>
-<h2>About Us</h2>
-<p>
-Smart Life is a smart-home company specializing in smart rooms, security,
-automation, and intelligent devices.  
-We help people upgrade their homes with modern technology that is reliable,
-secure, and easy to use.
-</p>
-</section>
+<section class="hero">
+  <h1 data-en="Smart Life – Smart Homes Made Easy"
+      data-ar="سمارت لايف – حلول المنازل الذكية"></h1>
 
-<footer>
-Contact: smart.life.www@gmail.com
-</footer>
+  <p data-en="Order smart rooms and smart devices with cash payment only."
+     data-ar="اطلب غرف ذكية وأجهزة ذكية مع الدفع كاش فقط."></p>
+
+  <a href="products.html" class="btn"
+     data-en="Explore Products"
+     data-ar="استعرض المنتجات"></a>
+</section>
 
 <script src="app.js"></script>
 </body>
