@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin | Smart Life</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<section>
+<h2>Operator Requests</h2>
+<div id="requests"></div>
+</section>
+
+<script>
+let reqs=JSON.parse(localStorage.getItem("operatorRequests")||"[]");
+const el=document.getElementById("requests");
+
+el.innerHTML=reqs.map((r,i)=>`
+ <div class="card">
+  <p>${r.email}</p>
+  <button onclick="approve(${i})">Accept</button>
+  <button onclick="reject(${i})">Reject</button>
+ </div>
+`).join("");
+
+function approve(i){
+ reqs[i].status="approved";
+ save();
+}
+
+function reject(i){
+ reqs[i].status="rejected";
+ save();
+}
+
+function save(){
+ localStorage.setItem("operatorRequests",JSON.stringify(reqs));
+ location.reload();
+}
+</script>
+</body>
+</html>
 
