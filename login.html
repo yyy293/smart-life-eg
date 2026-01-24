@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login | Smart Life</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<section class="auth">
+<h2>Login / Sign Up</h2>
+
+<select id="role">
+  <option value="customer">Customer</option>
+  <option value="operator">Operator</option>
+</select>
+
+<input id="email" placeholder="Email">
+<input id="username" placeholder="Username">
+<input type="password" placeholder="Password">
+
+<button onclick="submitAuth()">Submit</button>
+
+<p style="opacity:.7">
+Operator accounts require admin approval.
+</p>
+
+<a href="admin.html" style="color:#1e90ff">Admin Page</a>
+</section>
+
+<script>
+function submitAuth(){
+ const role=document.getElementById("role").value;
+ const email=document.getElementById("email").value;
+
+ if(role==="operator"){
+  let req=JSON.parse(localStorage.getItem("operatorRequests")||"[]");
+  req.push({email,status:"pending"});
+  localStorage.setItem("operatorRequests",JSON.stringify(req));
+  alert("Operator request sent for approval");
+ } else {
+  alert("Logged in as customer");
+ }
+}
+</script>
+</body>
+</html>
 
