@@ -1,29 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Products | Smart Life</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Products</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<nav>
-  <h1>Smart Life</h1>
-  <div>
-    <a href="index.html">Home</a>
-    <a href="cart.html">Cart (<span id="cartCount">0</span>)</a>
-  </div>
-  <img src="IMG_1324.jpeg">
-</nav>
+<header>
+  <a href="index.html">⬅</a>
+  <h2 data-en="Products" data-ar="المنتجات"></h2>
+</header>
 
-<section>
-<h2>Our Products</h2>
-<input placeholder="Search..." oninput="searchProducts(this.value)">
+<input class="search" placeholder="Search..."
+ oninput="searchProducts(this.value)">
+
 <div id="products" class="grid"></div>
-</section>
 
 <script src="app.js"></script>
 </body>
 </html>
-
