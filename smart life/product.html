@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Life - Products</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <img src="IMG_1324.jpeg" alt="Logo" style="height:50px;">
+  <div class="controls">
+    <button onclick="setLang('en')">EN</button>
+    <button onclick="setLang('ar')">AR</button>
+    <button onclick="toggleTheme()">Light / Dark</button>
+    <a href="cart.html"><button data-i18n="cart">Cart</button></a>
+  </div>
+</header>
 
+<main>
+<h2 data-i18n="products">Products</h2>
+<div class="products" id="products"></div>
+</main>
+
+<script src="app.js"></script>
+<script>
+if(!localStorage.getItem("user")) location.href="index.html";
+renderProducts();
+</script>
+</body>
+</html>
