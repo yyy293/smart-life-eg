@@ -3,29 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Life - Operator</title>
+<title>Operator - Smart Life</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-  <img src="IMG_1324.jpeg" alt="Logo" style="height:50px;">
-  <div class="controls">
-    <button onclick="setLang('en')">EN</button>
-    <button onclick="setLang('ar')">AR</button>
-    <button onclick="toggleTheme()">Light / Dark</button>
-  </div>
+  <img src="IMG_1324.jpeg" alt="Logo" class="logo">
+  <button onclick="location.href='index.html'">Home</button>
 </header>
 
 <main>
-<h2>Pending Orders</h2>
-<div id="orders"></div>
+  <h1>Operator Orders</h1>
+  <div id="orders"></div>
 </main>
 
 <script src="app.js"></script>
-<script>
-if(!localStorage.getItem("user") || (localStorage.getItem("role")!=="operator" && localStorage.getItem("role")!=="admin")) location.href="index.html";
-renderOperatorOrders();
-</script>
 </body>
 </html>
-
