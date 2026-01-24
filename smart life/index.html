@@ -7,31 +7,57 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <header>
-  <img src="IMG_1324.jpeg" alt="Logo" class="logo">
-  <div class="header-buttons">
-    <button onclick="showLogin()">Login / Signup</button>
-    <button onclick="location.href='products.html'">Explore Products</button>
-    <select onchange="setLang(this.value)">
-      <option value="en">English</option>
-      <option value="ar">العربية</option>
-    </select>
-    <button onclick="toggleTheme()">🌓</button>
+  <img src="IMG_1324.jpeg" alt="Smart Life Logo" class="logo">
+  <div class="toggles">
+    <button onclick="toggleTheme()">🌙 / ☀️</button>
+    <button onclick="setLang('en')">EN</button>
+    <button onclick="setLang('ar')">AR</button>
   </div>
 </header>
 
 <main>
-  <h1>Welcome to Smart Life</h1>
-  <div id="authForm" class="auth-form">
-    <input type="email" id="email" placeholder="Email">
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <label>
-      <input type="checkbox" id="isOperator"> I want to be an operator
-    </label>
-    <button onclick="signup()">Sign Up</button>
-    <button onclick="login()">Login</button>
-  </div>
+  <!-- Products Section -->
+  <section id="productsSection">
+    <h2 data-i18n="products">Products</h2>
+    <label><input type="checkbox" id="installCheck"> <span data-i18n="install">Add installation (+200 LE per item)</span></label>
+    <div id="products" class="products-container"></div>
+  </section>
+
+  <!-- Cart Section -->
+  <section id="cartSection">
+    <h2 data-i18n="cart">Cart</h2>
+    <div id="cartItems"></div>
+    <div id="total">Total: 0 LE</div>
+    <div data-i18n="payment">Payment: Cash only</div>
+    <button onclick="checkout()">Checkout</button>
+  </section>
+
+  <!-- Reviews / Bug Reports Section -->
+  <section id="reviewsSection">
+    <h2 data-i18n="reviewsSection">Reviews / Bug Reports</h2>
+    <form id="reviewForm" onsubmit="event.preventDefault(); submitReview();">
+      <label data-i18n="name">Name:</label><br>
+      <input type="text" id="reviewName" required><br>
+
+      <label data-i18n="product">Product:</label><br>
+      <select id="reviewProduct" required>
+        <option value="" data-i18n="selectProduct">--Select--</option>
+      </select><br>
+
+      <label data-i18n="type">Type:</label><br>
+      <input type="radio" name="reviewType" value="review" checked data-i18n="review"> Review
+      <input type="radio" name="reviewType" value="bug" data-i18n="bug"> Report Error<br>
+
+      <label data-i18n="message">Message:</label><br>
+      <textarea id="reviewMessage" required></textarea><br>
+
+      <button type="submit" data-i18n="submit">Submit</button>
+    </form>
+
+    <div id="reviewList"></div>
+  </section>
 </main>
 
 <script src="app.js"></script>
