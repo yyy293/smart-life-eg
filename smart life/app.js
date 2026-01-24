@@ -1,8 +1,8 @@
 // ====== Language & Theme ======
 let lang = 'en';
 const translations = {
-  en: { products: "Products", cart: "Cart", install: "Add installation (+200 LE per item)", payment: "Payment: Cash only", add: "Add to cart", approve: "Approve", reject: "Reject" },
-  ar: { products: "المنتجات", cart: "سلة الشراء", install: "إضافة تركيب (+200 جنيه لكل منتج)", payment: "الدفع: نقدًا فقط", add: "أضف إلى السلة", approve: "قبول", reject: "رفض" }
+  en: { products: "Products", cart: "Cart", install: "Add installation (+200 LE per item)", payment: "Payment: Cash only", add: "Add to cart", approve: "Approve", reject: "Reject", total: "Total", orders: "Pending Orders" },
+  ar: { products: "المنتجات", cart: "سلة الشراء", install: "إضافة تركيب (+200 جنيه لكل منتج)", payment: "الدفع: نقدًا فقط", add: "أضف إلى السلة", approve: "قبول", reject: "رفض", total: "المجموع", orders: "الطلبات المعلقة" }
 };
 
 function setLang(l) {
@@ -14,6 +14,9 @@ function setLang(l) {
   });
   renderProducts();
   renderCart();
+  renderAdminProducts();
+  renderOperatorRequests();
+  renderOperatorOrders();
 }
 
 function toggleTheme() {
@@ -68,15 +71,16 @@ if(products.length===0){
   save("products", products);
 }
 
-// ====== Cart ======
+// ====== Cart & Orders ======
 let cart = load("cart");
+let orders = load("orders");
 
 // ====== Login & SignUp ======
 function signup(){
   const email=document.getElementById("email").value;
   const username=document.getElementById("username").value;
   const password=document.getElementById("password").value;
-  const isOperator=document.getElementById("isOperator").checked;
+  const isOperator=document.getElementById("isOperator")?.checked || false;
 
   if(!email||!username||!password) return alert("Fill all fields");
   
@@ -117,7 +121,9 @@ function renderProducts(){
 
 // ====== Cart Functions ======
 function addToCart(id){
-  cart.push(products.find(p=>p.id===id));
+  const install=document.getElementById("installCheck")?.checked || false;
+  const product = {...products.find(p=>p.id===id), install};
+  cart.push(product);
   save("cart", cart);
   renderCart();
 }
@@ -132,18 +138,30 @@ function renderCart(){
   const div=document.getElementById("cartItems");
   if(!div) return;
   div.innerHTML="";
-  const install=document.getElementById("installCheck")?.checked;
   let total=0;
   cart.forEach((item,i)=>{
-    let price=item.price+(install?200:0);
+    let price=item.price + (item.install?200:0);
     total+=price;
     const itemDiv=document.createElement("div");
     itemDiv.className="cart-item";
-    itemDiv.innerHTML=`${item.name} - ${price} LE <button onclick="removeFromCart(${i})">X</button>`;
+    itemDiv.innerHTML=`${item.name} - ${price} LE
+      <button onclick="removeFromCart(${i})">X</button>`;
     div.appendChild(itemDiv);
   });
   const totalEl=document.getElementById("total");
-  if(totalEl) totalEl.innerText="Total: "+total+" LE";
+  if(totalEl) totalEl.innerText=translations[lang].total+": "+total+" LE";
+}
+
+function checkout(){
+  if(cart.length===0) return alert("Cart is empty");
+  if(!localStorage.getItem("user")) return alert("Please login to place order.");
+  const order = {user: localStorage.getItem("user"), items: cart, status:"pending"};
+  orders.push(order);
+  save("orders", orders);
+  cart=[];
+  save("cart", cart);
+  alert("Order placed successfully!");
+  renderCart();
 }
 
 // ====== Admin Functions ======
@@ -213,5 +231,29 @@ function rejectOperator(i){
 function renderOperatorOrders(){
   const container=document.getElementById("orders");
   if(!container) return;
-  container.innerHTML="<p>No orders yet.</p>"; // Future: Extend to real orders
+  container.innerHTML="";
+  const pendingOrders = orders.filter(o=>o.status==="pending");
+  if(pendingOrders.length===0){ container.innerHTML="<p>No orders yet.</p>"; return;}
+  pendingOrders.forEach((o,i)=>{
+    const div=document.createElement("div");
+    div.className="order-item";
+    let itemsList = o.items.map(it=>it.name+" ("+(it.price + (it.install?200:0))+" LE)").join("<br>");
+    div.innerHTML=`<strong>${o.user}</strong><br>${itemsList}<br>
+      Total: ${o.items.reduce((a,it)=>a+it.price+(it.install?200:0),0)} LE<br>
+      <button onclick="approveOrder(${i})">${translations[lang].approve}</button>
+      <button onclick="rejectOrder(${i})">${translations[lang].reject}</button>`;
+    container.appendChild(div);
+  });
+}
+
+function approveOrder(i){
+  orders[i].status="approved";
+  save("orders",orders);
+  renderOperatorOrders();
+}
+
+function rejectOrder(i){
+  orders[i].status="rejected";
+  save("orders",orders);
+  renderOperatorOrders();
 }
